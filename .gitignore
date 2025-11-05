@@ -1,0 +1,9 @@
+# Ignore all compiled executables
+*.exe
+
+# Ignore VS Code config files
+.vscode/
+
+# Ignore any JSON configuration files (optional, if you want to keep some remove this line)
+*.json
+

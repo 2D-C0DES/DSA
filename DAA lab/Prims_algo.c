@@ -1,0 +1,71 @@
+#include <stdio.h>
+#include <limits.h>
+#include <stdbool.h>
+
+#define MAX 100
+
+int minKey(int key[], bool mstSet[], int V) {
+    int min = INT_MAX, minIndex;
+
+    for (int v = 0; v < V; v++)
+        if (!mstSet[v] && key[v] < min)
+            min = key[v], minIndex = v;
+
+    return minIndex;
+}
+
+void printMST(int parent[], int graph[MAX][MAX], int V) {
+    int totalWeight = 0;
+    printf("Edge \tWeight\n");
+    for (int i = 1; i < V; i++) {
+        printf("%d - %d\t%d\n", parent[i], i, graph[i][parent[i]]);
+        totalWeight += graph[i][parent[i]];
+    }
+    printf("Total Weight of MST: %d\n", totalWeight);
+}
+
+void primMST(int graph[MAX][MAX], int V) {
+    int parent[MAX];   // Array to store constructed MST
+    int key[MAX];      // Key values used to pick min weight edge
+    bool mstSet[MAX];  // To represent set of vertices included in MST
+
+    // Initialize all keys as infinite
+    for (int i = 0; i < V; i++) {
+        key[i] = INT_MAX;
+        mstSet[i] = false;
+    }
+
+    key[0] = 0;      // Start from vertex 0
+    parent[0] = -1;  // First node is root of MST
+
+    for (int count = 0; count < V - 1; count++) {
+        int u = minKey(key, mstSet, V);  // Pick min key vertex
+        mstSet[u] = true;                // Add to MST
+
+        // Update keys of adjacent vertices
+        for (int v = 0; v < V; v++)
+            if (graph[u][v] && !mstSet[v] && graph[u][v] < key[v]) {
+                parent[v] = u;
+                key[v] = graph[u][v];
+            }
+    }
+
+    printMST(parent, graph, V);
+}
+
+
+int main() {
+    int V;
+    int graph[MAX][MAX];
+
+    printf("Enter the number of vertices: ");
+    scanf("%d", &V);
+
+    printf("Enter the adjacency matrix (0 if no edge):\n");
+    for (int i = 0; i < V; i++)
+        for (int j = 0; j < V; j++)
+            scanf("%d", &graph[i][j]);
+
+    primMST(graph, V);
+    return 0;
+}
