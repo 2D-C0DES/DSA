@@ -7,3 +7,4 @@
 # Ignore any JSON configuration files (optional, if you want to keep some remove this line)
 *.json
 
+boilerplate.c
